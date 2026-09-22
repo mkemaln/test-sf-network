@@ -1,0 +1,21 @@
+switches: [s1, s2, s3, s4, s5, s6]
+hosts:
+  - name: h1
+    switch: s1
+  - name: h2
+    switch: s5
+  - name: h3
+    switch: s6
+links:
+  - {a: s1, b: s2, bw_mbps: 10, delay_ms: 3}
+  - {a: s1, b: s3, bw_mbps: 10, delay_ms: 6}
+  - {a: s1, b: s6, bw_mbps: 10, delay_ms: 2}
+  - {a: s2, b: s3, bw_mbps: 10, delay_ms: 2}
+  - {a: s2, b: s4, bw_mbps: 10, delay_ms: 5}
+  - {a: s3, b: s5, bw_mbps: 10, delay_ms: 3}
+  - {a: s4, b: s5, bw_mbps: 10, delay_ms: 7}
+  - {a: s4, b: s6, bw_mbps: 10, delay_ms: 4}
+  - {a: s5, b: s6, bw_mbps: 10, delay_ms: 5}
+demands:
+  - {id: d1, src: h1, dst: h2, rate_mbps: 5, initial_path: 0}
+  - {id: d2, src: h1, dst: h3, rate_mbps: 3, initial_path: 0}

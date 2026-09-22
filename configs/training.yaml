@@ -1,0 +1,61 @@
+candidates:
+  k: 4
+episode:
+  length_s: 60
+  decision_interval_s: 1.0
+  failure_onset_min_s: 10
+  failure_onset_max_s: 40
+  ref_intervals: 5
+  hard_rebuild_every: 50
+recovery:
+  loss_threshold: 0.02
+  rtt_factor: 1.5
+  sustain_intervals: 3
+reward:
+  w_throughput: 1.0
+  w_rtt: 0.25
+  w_loss: 2.0
+  w_switch: 0.1
+  w_fail: 1.0
+telemetry:
+  ping_count: 4
+  ping_interval: 0.2
+  iperf_interval_s: 1.0
+  rtt_cap_s: 0.2
+  rtt_ref_default_s: 0.02
+  probe_grace_s: 5
+odl:
+  base_url: http://127.0.0.1:8181
+  username: admin
+  password_env: ODL_PASSWORD
+  timeout_s: 5
+  retries: 3
+  flow_priority_baseline: 100
+  flow_priority_reroute: 110
+  verify_flows: true
+  flow_verify_timeout_s: 5
+eval:
+  manifest: configs/eval_scenarios.json
+seeds: [0, 1, 2, 3, 4]
+budget:
+  pilot_steps: 50000
+  full_steps: 100000
+dqn:
+  policy: [128, 128]
+  learning_rate: 0.0003
+  gamma: 0.99
+  buffer_size: 50000
+  batch_size: 128
+  exploration_fraction: 0.6
+  exploration_final_eps: 0.05
+  train_freq: 4
+  target_update_interval: 1000
+ppo:
+  policy: [128, 128]
+  learning_rate: 0.0003
+  gamma: 0.99
+  n_steps: 2048
+  gae_lambda: 0.95
+  clip_range: 0.2
+  n_epochs: 10
+  ent_coef: 0.01
