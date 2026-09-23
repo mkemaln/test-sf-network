@@ -2,7 +2,7 @@
 set -euo pipefail
 
 sudo apt-get update
-sudo apt-get install -y mininet openvswitch-switch openvswitch-common iperf3 openjdk-17-jdk curl python3.10-venv python3-pip git
+sudo apt-get install -y mininet openvswitch-switch openvswitch-common iperf3 openjdk-17-jdk curl python3.12-venv python3-pip git
 sudo systemctl enable --now openvswitch-switch
 
 ODL_VERSION="${ODL_VERSION:-0.21.4}"
