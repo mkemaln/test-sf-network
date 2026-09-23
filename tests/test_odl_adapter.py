@@ -1,6 +1,6 @@
 import pytest
 
-from shn.env.odl_adapter import FlowRule, ODLAdapter, ODLRequestError
+from shn.env.odl_adapter import FlowRule, ODLAdapter, ODLRequestError, ODLUnsafeStateError
 
 
 class FakeResponse:
@@ -134,3 +134,46 @@ def test_get_port_stats(monkeypatch):
 def test_extract_flow_ids():
     data = {"flow-node-inventory:table": [{"flow": [{"id": "a"}, {"id": "b"}]}]}
     assert ODLAdapter._extract_flow_ids(data) == {"a", "b"}
+
+
+def test_verify_installed_per_node_success(monkeypatch):
+    adapter = make_adapter()
+
+    def fake_ids(node):
+        return {"a"} if node == "openflow:1" else {"b"}
+
+    monkeypatch.setattr(adapter, "get_installed_flow_ids", fake_ids)
+    rules = [FlowRule("openflow:1", "a", {}), FlowRule("openflow:2", "b", {})]
+    adapter._verify_installed(rules, timeout_s=0.1)
+
+
+def test_verify_installed_fails_when_flow_on_wrong_node(monkeypatch):
+    adapter = make_adapter()
+
+    def fake_ids(node):
+        return {"a", "b"} if node == "openflow:1" else {"a"}
+
+    monkeypatch.setattr(adapter, "get_installed_flow_ids", fake_ids)
+    rules = [FlowRule("openflow:1", "a", {}), FlowRule("openflow:2", "b", {})]
+    with pytest.raises(ODLRequestError):
+        adapter._verify_installed(rules, timeout_s=0.1)
+
+
+def test_install_rules_unsafe_on_rollback_failure(monkeypatch):
+    adapter = make_adapter()
+
+    def fake_request(method, path, body=None):
+        flow_id = path.split("/flow/")[-1]
+        if method == "PUT" and flow_id == "a":
+            return FakeResponse(200)
+        if method == "PUT" and flow_id == "b":
+            raise ODLRequestError("put b failed")
+        if method == "DELETE":
+            raise ODLRequestError("delete failed")
+        return FakeResponse(200)
+
+    monkeypatch.setattr(adapter, "_request", fake_request)
+    new = [FlowRule("openflow:1", "a", {}), FlowRule("openflow:1", "b", {})]
+    old = []
+    with pytest.raises(ODLUnsafeStateError):
+        adapter.install_rules(new, old, verify=False, timeout_s=1.0)

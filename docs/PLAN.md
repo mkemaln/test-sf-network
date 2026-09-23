@@ -120,6 +120,8 @@ Failure mechanics: Mininet Python API `net.configLinkStatus(a, b, 'down')` — O
 
 A Demand is **Recovered** when loss < 2% AND RTT ≤ 150% of `rtt_ref`, sustained for **3 consecutive Decision Intervals**.
 
+An interval whose iperf sample has not been measured yet is marked invalid telemetry: it neither advances nor resets Recovery counters, contributes neutrally to reward, and counts as not-acceptable for Availability — never as 100% loss.
+
 | Metric | Definition |
 |---|---|
 | Time-to-Recovery | seconds from Failure onset to Recovery (per Demand; episode-level max) |
@@ -133,8 +135,9 @@ Evaluation never reads training reward as "performance."
 
 At episode start: baseline Active Path rules pre-installed. On reroute action (ADR 0007):
 1. Push new path's rules via ODL RESTCONF at priority +10.
-2. Delete old path's rules.
-Never delete-then-add. The adapter enforces ordering internally.
+2. Verify the new rules are present on their switches (operational flow inventory, per-node).
+3. Delete old path's rules.
+Never delete-then-add. The adapter enforces ordering internally. If installing the new path fails, it rolls back the new rules and the action is penalized; if rollback also fails the environment terminates the episode as an unsafe controller state.
 
 ## 11. Training protocol
 

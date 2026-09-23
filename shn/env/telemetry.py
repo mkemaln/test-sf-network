@@ -29,17 +29,20 @@ class Telemetry:
         for demand in self.demands:
             source = self.hosts[demand["src"]]
             destination_ip = self.hosts[demand["dst"]].IP()
+            log_path = f"/tmp/shn_{demand['id']}.log"
+            pid_path = f"/tmp/shn_{demand['id']}.pid"
             command = (
                 f"iperf3 -c {destination_ip} -u -b {demand['rate_mbps']}M "
                 f"-t {int(duration_s)} -i {interval} "
-                f"> /tmp/shn_{demand['id']}.log 2>&1 &"
+                f"> {log_path} 2>&1 & echo $! > {pid_path}"
             )
             source.cmd(command)
 
     def stop_clients(self) -> None:
         for demand in self.demands:
             source = self.hosts[demand["src"]]
-            source.cmd("pkill -f 'iperf3 -c' 2>/dev/null; true")
+            pid_path = f"/tmp/shn_{demand['id']}.pid"
+            source.cmd(f"kill $(cat {pid_path} 2>/dev/null) 2>/dev/null; true")
 
     def set_baseline_stats(self, stats: dict) -> None:
         self.previous_stats = stats
@@ -99,10 +102,15 @@ class Telemetry:
             ping_loss, rtt_s = self._parse_ping(ping_outputs.get(demand["id"], ""), cap)
             iperf = self._parse_iperf_interval(iperf_outputs.get(demand["id"], ""))
             if iperf is None:
-                delivered_ratio, loss = 0.0, 1.0
+                result[demand["id"]] = DemandQoS(delivered_ratio=0.0, loss=0.0, rtt_s=rtt_s, valid=False)
             else:
                 delivered_ratio, loss = iperf
-            result[demand["id"]] = DemandQoS(delivered_ratio, max(loss, ping_loss), rtt_s)
+                result[demand["id"]] = DemandQoS(
+                    delivered_ratio=delivered_ratio,
+                    loss=max(loss, ping_loss),
+                    rtt_s=rtt_s,
+                    valid=True,
+                )
         return result
 
     @staticmethod

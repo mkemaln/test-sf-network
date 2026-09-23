@@ -8,6 +8,10 @@ class ODLRequestError(RuntimeError):
     pass
 
 
+class ODLUnsafeStateError(ODLRequestError):
+    pass
+
+
 TRANSIENT_STATUS = {408, 429, 500, 502, 503, 504}
 
 
@@ -112,20 +116,26 @@ class ODLAdapter:
                 installed.append(rule)
             if verify:
                 self._verify_installed(new_rules, timeout_s)
-        except Exception:
-            self.delete_rules(installed)
+        except Exception as original_error:
+            try:
+                self.delete_rules(installed)
+            except Exception as rollback_error:
+                raise ODLUnsafeStateError(
+                    f"flow installation failed ({original_error}); rollback failed ({rollback_error})"
+                ) from original_error
             raise
         self.delete_rules(old_rules)
 
     def _verify_installed(self, rules: list[FlowRule], timeout_s: float) -> None:
-        nodes = {rule.node for rule in rules}
-        expected = {rule.flow_id for rule in rules}
+        expected_by_node: dict[str, set[str]] = {}
+        for rule in rules:
+            expected_by_node.setdefault(rule.node, set()).add(rule.flow_id)
         deadline = time.monotonic() + timeout_s
         while time.monotonic() < deadline:
-            found: set[str] = set()
-            for node in nodes:
-                found |= self.get_installed_flow_ids(node)
-            if expected.issubset(found):
+            if all(
+                expected_ids.issubset(self.get_installed_flow_ids(node))
+                for node, expected_ids in expected_by_node.items()
+            ):
                 return
             time.sleep(0.5)
         raise ODLRequestError("flow installation verification timed out")

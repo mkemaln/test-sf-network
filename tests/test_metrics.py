@@ -75,3 +75,29 @@ def test_reward_switch_penalty():
     base = compute_reward(qos, {"d1": 0.02}, False, weights)
     switched = compute_reward(qos, {"d1": 0.02}, True, weights)
     assert switched == pytest.approx(base - 0.1)
+
+
+def test_invalid_qos_not_acceptable():
+    config = RecoveryConfig(0.02, 1.5, 3)
+    invalid = DemandQoS(0.0, 0.0, 0.02, valid=False)
+    assert not meets_acceptable(invalid, 0.02, config)
+
+
+def test_reward_invalid_telemetry_is_neutral():
+    weights = {"w_throughput": 1.0, "w_rtt": 0.25, "w_loss": 2.0, "w_switch": 0.1, "w_fail": 1.0}
+    invalid = DemandQoS(0.0, 0.0, 0.02, valid=False)
+    reward = compute_reward({"d1": invalid}, {"d1": 0.02}, False, weights)
+    assert reward == pytest.approx(0.0)
+
+
+def test_recovery_ignores_invalid_telemetry():
+    config = RecoveryConfig(0.02, 1.5, 3)
+    tracker = RecoveryTracker(["d1"], config)
+    good = DemandQoS(0.9, 0.01, 0.03)
+    invalid = DemandQoS(0.0, 0.0, 0.02, valid=False)
+    tracker.update("d1", invalid, 0.02)
+    tracker.update("d1", good, 0.02)
+    tracker.update("d1", good, 0.02)
+    assert not tracker.is_recovered("d1")
+    tracker.update("d1", good, 0.02)
+    assert tracker.is_recovered("d1")

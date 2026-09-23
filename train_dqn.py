@@ -30,28 +30,27 @@ def main():
     set_random_seed(args.seed)
     env = build_env(args.seed)
 
-    cfg = training["dqn"]
-    model = DQN(
-        "MlpPolicy",
-        env,
-        policy_kwargs={"net_arch": cfg["policy"]},
-        learning_rate=float(cfg["learning_rate"]),
-        gamma=float(cfg["gamma"]),
-        buffer_size=int(cfg["buffer_size"]),
-        batch_size=int(cfg["batch_size"]),
-        exploration_fraction=float(cfg["exploration_fraction"]),
-        exploration_final_eps=float(cfg["exploration_final_eps"]),
-        train_freq=int(cfg["train_freq"]),
-        target_update_interval=int(cfg["target_update_interval"]),
-        tensorboard_log="runs/dqn",
-        seed=args.seed,
-        verbose=1,
-    )
-
     run_dir = Path("results") / (args.name or f"dqn_seed{args.seed}")
     run_dir.mkdir(parents=True, exist_ok=True)
     started = time.time()
+    cfg = training["dqn"]
     try:
+        model = DQN(
+            "MlpPolicy",
+            env,
+            policy_kwargs={"net_arch": cfg["policy"]},
+            learning_rate=float(cfg["learning_rate"]),
+            gamma=float(cfg["gamma"]),
+            buffer_size=int(cfg["buffer_size"]),
+            batch_size=int(cfg["batch_size"]),
+            exploration_fraction=float(cfg["exploration_fraction"]),
+            exploration_final_eps=float(cfg["exploration_final_eps"]),
+            train_freq=int(cfg["train_freq"]),
+            target_update_interval=int(cfg["target_update_interval"]),
+            tensorboard_log="runs/dqn",
+            seed=args.seed,
+            verbose=1,
+        )
         model.learn(total_timesteps=steps)
         model.save(run_dir / "model")
     finally:

@@ -8,7 +8,7 @@ from gymnasium import spaces
 from shn.candidates import CandidatePath, decode_action
 from shn.env.failure_injector import FailureInjector
 from shn.env.mininet_topo import build_network
-from shn.env.odl_adapter import FlowRule, ODLAdapter, ODLRequestError
+from shn.env.odl_adapter import FlowRule, ODLAdapter, ODLRequestError, ODLUnsafeStateError
 from shn.env.telemetry import Telemetry
 from shn.metrics import (
     AvailabilityTracker,
@@ -77,6 +77,12 @@ class HealingEnv(gym.Env):
         self.odl_config = training["odl"]
         self.verify_flows = bool(self.odl_config.get("verify_flows", True))
         self.flow_verify_timeout_s = float(self.odl_config.get("flow_verify_timeout_s", 5))
+        password = os.environ.get(self.odl_config["password_env"])
+        if not password:
+            raise RuntimeError(
+                f"missing controller credential: set {self.odl_config['password_env']} in the environment"
+            )
+        self._password = password
         self.action_space = spaces.Discrete(self.n_demands * self.k + 1)
         self.observation_space = spaces.Box(
             low=0.0,
@@ -100,6 +106,7 @@ class HealingEnv(gym.Env):
         self.failure_injected = False
         self.failure_time_s: float | None = None
         self.recovery_time_s: float | None = None
+        self.unsafe_state = False
         self.rtt_refs: dict[str, float] = {}
         self.rtt_samples: dict[str, list[float]] = {}
         self.recovery_tracker = RecoveryTracker([], self.recovery_config)
@@ -115,15 +122,10 @@ class HealingEnv(gym.Env):
             host["name"]: self.network.get(host["name"]).MAC()
             for host in self.topology["hosts"]
         }
-        password = os.environ.get(self.odl_config["password_env"])
-        if not password:
-            raise RuntimeError(
-                f"missing controller credential: set {self.odl_config['password_env']} in the environment"
-            )
         self.adapter = ODLAdapter(
             self.odl_config["base_url"],
             self.odl_config["username"],
-            password,
+            self._password,
             float(self.odl_config["timeout_s"]),
             int(self.odl_config["retries"]),
         )
@@ -265,6 +267,7 @@ class HealingEnv(gym.Env):
         if self.network is None:
             self._build_network()
         elif self.episode_count > 0 and self.episode_count % int(self.training["episode"]["hard_rebuild_every"]) == 0:
+            self.telemetry.stop_clients()
             self.network.stop()
             self.network = None
             self._build_network()
@@ -288,6 +291,7 @@ class HealingEnv(gym.Env):
         self.failure_time_s = None
         self.recovery_time_s = None
         self.scenario_disrupts = False
+        self.unsafe_state = False
         default_rtt = float(self.training["telemetry"]["rtt_ref_default_s"])
         self.rtt_refs = {demand["id"]: default_rtt for demand in self.demands}
         self.rtt_samples = {demand["id"]: [] for demand in self.demands}
@@ -314,6 +318,9 @@ class HealingEnv(gym.Env):
                 try:
                     self._install_path(demand_index, path_index)
                     changed = True
+                except ODLUnsafeStateError:
+                    action_failed = True
+                    self.unsafe_state = True
                 except ODLRequestError:
                     action_failed = True
         link_features, qos = self.telemetry.sample(self.delta_s)
@@ -339,15 +346,17 @@ class HealingEnv(gym.Env):
             "scenario": self.scenario,
             "changed": changed,
             "action_failed": action_failed,
+            "unsafe_state": self.unsafe_state,
             "qos": {key: value.__dict__ for key, value in qos.items()},
             "recovered": recovered,
             "recovery_time_s": self.recovery_time_s,
             "availability": self.availability_tracker.availability,
         }
-        return self._build_observation(link_features, qos), reward, False, truncated, info
+        return self._build_observation(link_features, qos), reward, self.unsafe_state, truncated, info
 
     def close(self) -> None:
         if self.network is not None:
+            self.telemetry.stop_clients()
             self.injector.restore()
             self.network.stop()
             self.network = None

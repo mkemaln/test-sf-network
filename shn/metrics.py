@@ -6,6 +6,7 @@ class DemandQoS:
     delivered_ratio: float
     loss: float
     rtt_s: float
+    valid: bool = True
 
 
 @dataclass(frozen=True)
@@ -16,6 +17,8 @@ class RecoveryConfig:
 
 
 def meets_acceptable(qos: DemandQoS, rtt_ref_s: float, config: RecoveryConfig) -> bool:
+    if not qos.valid:
+        return False
     return qos.loss < config.loss_threshold and qos.rtt_s <= config.rtt_factor * rtt_ref_s
 
 
@@ -27,6 +30,8 @@ class RecoveryTracker:
 
     def update(self, demand_id: str, qos: DemandQoS, rtt_ref_s: float) -> None:
         if self.recovered[demand_id]:
+            return
+        if not qos.valid:
             return
         if meets_acceptable(qos, rtt_ref_s, self.config):
             self.consecutive[demand_id] += 1
@@ -68,9 +73,10 @@ def compute_reward(
 ) -> float:
     reward = 0.0
     for demand_id, qos in qos_by_demand.items():
-        reward += weights["w_throughput"] * qos.delivered_ratio
+        if qos.valid:
+            reward += weights["w_throughput"] * qos.delivered_ratio
+            reward -= weights["w_loss"] * qos.loss
         reward += weights["w_rtt"] * max(0.0, 1.0 - qos.rtt_s / max(rtt_refs[demand_id], 1e-9))
-        reward -= weights["w_loss"] * qos.loss
     if changed:
         reward -= weights["w_switch"]
     if failed:

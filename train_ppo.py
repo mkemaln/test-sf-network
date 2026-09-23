@@ -30,27 +30,26 @@ def main():
     set_random_seed(args.seed)
     env = build_env(args.seed)
 
-    cfg = training["ppo"]
-    model = PPO(
-        "MlpPolicy",
-        env,
-        policy_kwargs={"net_arch": cfg["policy"]},
-        learning_rate=float(cfg["learning_rate"]),
-        gamma=float(cfg["gamma"]),
-        n_steps=int(cfg["n_steps"]),
-        gae_lambda=float(cfg["gae_lambda"]),
-        clip_range=float(cfg["clip_range"]),
-        n_epochs=int(cfg["n_epochs"]),
-        ent_coef=float(cfg["ent_coef"]),
-        tensorboard_log="runs/ppo",
-        seed=args.seed,
-        verbose=1,
-    )
-
     run_dir = Path("results") / (args.name or f"ppo_seed{args.seed}")
     run_dir.mkdir(parents=True, exist_ok=True)
     started = time.time()
+    cfg = training["ppo"]
     try:
+        model = PPO(
+            "MlpPolicy",
+            env,
+            policy_kwargs={"net_arch": cfg["policy"]},
+            learning_rate=float(cfg["learning_rate"]),
+            gamma=float(cfg["gamma"]),
+            n_steps=int(cfg["n_steps"]),
+            gae_lambda=float(cfg["gae_lambda"]),
+            clip_range=float(cfg["clip_range"]),
+            n_epochs=int(cfg["n_epochs"]),
+            ent_coef=float(cfg["ent_coef"]),
+            tensorboard_log="runs/ppo",
+            seed=args.seed,
+            verbose=1,
+        )
         model.learn(total_timesteps=steps)
         model.save(run_dir / "model")
     finally:
