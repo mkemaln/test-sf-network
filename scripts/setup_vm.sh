@@ -20,14 +20,14 @@ echo "[1/5] Installing system packages..."
 sudo apt-get update -qq
 sudo apt-get install -y \
   mininet openvswitch-switch openvswitch-common \
-  iperf3 openjdk-17-jdk curl git \
+  iperf3 openjdk-17-jdk curl git ca-certificates \
   python3-venv python3-pip
 sudo systemctl enable --now openvswitch-switch
 
 # ── 2. OpenDaylight — download and start ─────────────────────────────────
 echo ""
 echo "[2/5] Downloading OpenDaylight ${ODL_VERSION}..."
-curl -fL -o odl-karaf.tar.gz \
+curl -fkL -o odl-karaf.tar.gz \
   "https://nexus.opendaylight.org/content/repositories/opendaylight.release/org/opendaylight/integration/karaf/${ODL_VERSION}/karaf-${ODL_VERSION}.tar.gz"
 mkdir -p odl
 tar -xzf odl-karaf.tar.gz -C odl --strip-components=1
