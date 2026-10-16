@@ -6,7 +6,7 @@ set -euo pipefail
 # Target: Ubuntu 22.04 LTS Server, 4 GB RAM
 # ─────────────────────────────────────────────────────────────────────────
 
-ODL_VERSION="${ODL_VERSION:-0.21.4}"
+ODL_VERSION="${ODL_VERSION:-0.24.0}"
 ODL_PASSWORD="${ODL_PASSWORD:-admin}"
 
 echo "========================================"
@@ -27,8 +27,10 @@ sudo systemctl enable --now openvswitch-switch
 # ── 2. OpenDaylight — download and start ─────────────────────────────────
 echo ""
 echo "[2/5] Downloading OpenDaylight ${ODL_VERSION}..."
+# curl -fkL -o odl-karaf.tar.gz \
+#   "https://nexus.opendaylight.org/content/repositories/opendaylight.release/org/opendaylight/integration/karaf/${ODL_VERSION}/karaf-${ODL_VERSION}.tar.gz"
 curl -fkL -o odl-karaf.tar.gz \
-  "https://nexus.opendaylight.org/content/repositories/opendaylight.release/org/opendaylight/integration/karaf/${ODL_VERSION}/karaf-${ODL_VERSION}.tar.gz"
+  "https://nexus.opendaylight.org/content/repositories/opendaylight.release/org/opendaylight/integration/karaf/0.24.0/karaf-0.24.0.tar.gz"
 mkdir -p odl
 tar -xzf odl-karaf.tar.gz -C odl --strip-components=1
 ./odl/bin/start
