@@ -60,7 +60,7 @@ class ODLAdapter:
     def get_topology_links(self) -> set[frozenset[str]]:
         response = self._request(
             "GET",
-            "/restconf/operational/network-topology:network-topology/topology/flow:1",
+            "/rests/operations/network-topology:network-topology/topology/flow:1",
         )
         data = response.json()
         links: set[frozenset[str]] = set()
@@ -73,7 +73,7 @@ class ODLAdapter:
         return links
 
     def get_port_stats(self) -> dict[tuple[str, int], dict[str, int]]:
-        response = self._request("GET", "/restconf/operational/opendaylight-inventory:nodes")
+        response = self._request("GET", "/rests/operations/opendaylight-inventory:nodes")
         data = response.json()
         result: dict[tuple[str, int], dict[str, int]] = {}
         for node in data.get("nodes", {}).get("node", []):
@@ -93,7 +93,7 @@ class ODLAdapter:
     def get_installed_flow_ids(self, node: str) -> set[str]:
         response = self._request(
             "GET",
-            f"/restconf/operational/opendaylight-inventory:nodes/node/{node}/flow-node-inventory:table/0",
+            f"/rests/operations/opendaylight-inventory:nodes/node/{node}/flow-node-inventory:table/0",
         )
         data = response.json()
         return self._extract_flow_ids(data)
@@ -111,7 +111,7 @@ class ODLAdapter:
         installed: list[FlowRule] = []
         try:
             for rule in new_rules:
-                path = f"/restconf/config/opendaylight-inventory:nodes/node/{rule.node}/flow-node-capability:table/0/flow/{rule.flow_id}"
+                path = f"/rests/config/opendaylight-inventory:nodes/node/{rule.node}/flow-node-capability:table/0/flow/{rule.flow_id}"
                 self._request("PUT", path, rule.body)
                 installed.append(rule)
             if verify:
@@ -142,5 +142,5 @@ class ODLAdapter:
 
     def delete_rules(self, rules: list[FlowRule]) -> None:
         for rule in rules:
-            path = f"/restconf/config/opendaylight-inventory:nodes/node/{rule.node}/flow-node-capability:table/0/flow/{rule.flow_id}"
+            path = f"/rests/config/opendaylight-inventory:nodes/node/{rule.node}/flow-node-capability:table/0/flow/{rule.flow_id}"
             self._request("DELETE", path)

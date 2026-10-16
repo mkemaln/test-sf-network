@@ -68,7 +68,7 @@ wait_for_odl
 # ── 4. Python venv + dependencies ────────────────────────────────────────
 echo ""
 echo "[4/5] Creating Python venv and installing dependencies..."
-python3 -m venv .venv
+python3 -m venv --system-site-packages .venv
 .venv/bin/pip install --upgrade pip
 .venv/bin/pip install torch --index-url https://download.pytorch.org/whl/cpu
 .venv/bin/pip install -r requirements.txt
