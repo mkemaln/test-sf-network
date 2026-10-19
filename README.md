@@ -41,6 +41,10 @@ export ODL_PASSWORD=<password>
 
 `setup_vm.sh` uses this variable for its one-time smoke check too.
 
+## start ODL manually
+./bin/start 
+export JAVA_HOME=/usr/lib/jvm/java-21-openjdk-amd64
+
 ## Run training
 
 All constants live in `configs/topology.yaml` and `configs/training.yaml`; edit there, not in code.
@@ -53,6 +57,9 @@ export ODL_PASSWORD=<password>
 
 # PPO — pilot run
 .venv/bin/python train_ppo.py --seed 0 --steps 50000
+
+# fixing mininet root problem
+sudo ODL_PASSWORD=admin .venv/bin/python train_dqn.py --seed 0 --steps 50000
 ```
 
 Arguments:

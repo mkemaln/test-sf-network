@@ -60,7 +60,7 @@ class ODLAdapter:
     def get_topology_links(self) -> set[frozenset[str]]:
         response = self._request(
             "GET",
-            "/rests/operations/network-topology:network-topology/topology/flow:1",
+            "/rests/data/network-topology:network-topology/topology/flow:1",
         )
         data = response.json()
         links: set[frozenset[str]] = set()
@@ -73,7 +73,7 @@ class ODLAdapter:
         return links
 
     def get_port_stats(self) -> dict[tuple[str, int], dict[str, int]]:
-        response = self._request("GET", "/rests/operations/opendaylight-inventory:nodes")
+        response = self._request("GET", "/rests/data/opendaylight-inventory:nodes")
         data = response.json()
         result: dict[tuple[str, int], dict[str, int]] = {}
         for node in data.get("nodes", {}).get("node", []):
@@ -93,7 +93,7 @@ class ODLAdapter:
     def get_installed_flow_ids(self, node: str) -> set[str]:
         response = self._request(
             "GET",
-            f"/rests/operations/opendaylight-inventory:nodes/node/{node}/flow-node-inventory:table/0",
+            f"/rests/data/opendaylight-inventory:nodes/node/{node}/flow-node-inventory:table/0",
         )
         data = response.json()
         return self._extract_flow_ids(data)
