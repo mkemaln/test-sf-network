@@ -1,0 +1,531 @@
+ "output-node-connector": "4"
+                                                        }
+                                                    }
+                                                ]
+                                            }
+                                        }
+--
+                                                            "output-node-connector": "3"
+                                                        }
+                                                    },
+                                                    {
+                                                        "order": 1,
+                                                        "output-action": {
+--
+                                                            "output-node-connector": "CONTROLLER"
+                                                        }
+                                                    }
+                                                ]
+                                            }
+                                        }
+--
+                                                            "output-node-connector": "CONTROLLER"
+                                                        }
+                                                    }
+                                                ]
+                                            }
+                                        }
+--
+                "node-connector": [
+                    {
+                        "id": "openflow:5:1",
+                        "flow-node-inventory:port-number": 1,
+                        "flow-node-inventory:hardware-address": "6a:9d:ea:c3:10:a0",
+                        "flow-node-inventory:peer-features": "",
+--
+                        "opendaylight-port-statistics:flow-capable-node-connector-statistics": {
+                            "receive-drops": "0",
+                            "transmit-drops": "0",
+                            "receive-frame-error": "0",
+                            "collision-count": "0",
+                            "packets": {
+--
+                        "stp-status-aware-node-connector:status": "discarding"
+                    },
+                    {
+                        "id": "openflow:5:4",
+                        "flow-node-inventory:port-number": 4,
+                        "flow-node-inventory:hardware-address": "e2:02:16:fc:92:c9",
+--
+                        "opendaylight-port-statistics:flow-capable-node-connector-statistics": {
+                            "receive-drops": "0",
+                            "transmit-drops": "0",
+                            "receive-frame-error": "0",
+                            "collision-count": "0",
+                            "packets": {
+--
+                        "opendaylight-port-statistics:flow-capable-node-connector-statistics": {
+                            "receive-drops": "0",
+                            "transmit-drops": "0",
+                            "receive-frame-error": "0",
+                            "collision-count": "0",
+                            "packets": {
+--
+                        "opendaylight-port-statistics:flow-capable-node-connector-statistics": {
+                            "receive-drops": "0",
+                            "transmit-drops": "0",
+                            "receive-frame-error": "0",
+                            "collision-count": "0",
+                            "packets": {
+--
+                        "stp-status-aware-node-connector:status": "forwarding"
+                    },
+                    {
+                        "id": "openflow:5:2",
+                        "flow-node-inventory:port-number": 2,
+                        "flow-node-inventory:hardware-address": "ee:05:4b:57:ef:8d",
+--
+                        "opendaylight-port-statistics:flow-capable-node-connector-statistics": {
+                            "receive-drops": "0",
+                            "transmit-drops": "0",
+                            "receive-frame-error": "0",
+                            "collision-count": "0",
+                            "packets": {
+--
+                        "stp-status-aware-node-connector:status": "discarding"
+                    }
+                ],
+                "flow-node-inventory:ip-address": "127.0.0.1",
+                "flow-node-inventory:serial-number": "None",
+                "flow-node-inventory:snapshot-gathering-status-end": {
+--
+                                                            "output-node-connector": "3"
+                                                        }
+                                                    },
+                                                    {
+                                                        "order": 1,
+                                                        "output-action": {
+--
+                                                            "output-node-connector": "2"
+                                                        }
+                                                    },
+                                                    {
+                                                        "order": 2,
+                                                        "output-action": {
+--
+                                                            "output-node-connector": "CONTROLLER"
+                                                        }
+                                                    }
+                                                ]
+                                            }
+                                        }
+--
+                                                            "output-node-connector": "CONTROLLER"
+                                                        }
+                                                    }
+                                                ]
+                                            }
+                                        }
+--
+                                                            "output-node-connector": "4"
+                                                        }
+                                                    },
+                                                    {
+                                                        "order": 1,
+                                                        "output-action": {
+--
+                                                            "output-node-connector": "3"
+                                                        }
+                                                    }
+                                                ]
+                                            }
+                                        }
+--
+                                                            "output-node-connector": "4"
+                                                        }
+                                                    },
+                                                    {
+                                                        "order": 1,
+                                                        "output-action": {
+--
+                                                            "output-node-connector": "2"
+                                                        }
+                                                    }
+                                                ]
+                                            }
+                                        }
+--
+                "node-connector": [
+                    {
+                        "id": "openflow:6:4",
+                        "flow-node-inventory:port-number": 4,
+                        "flow-node-inventory:hardware-address": "fa:84:07:a9:5a:e9",
+                        "flow-node-inventory:peer-features": "",
+--
+                        "opendaylight-port-statistics:flow-capable-node-connector-statistics": {
+                            "receive-drops": "0",
+                            "transmit-drops": "0",
+                            "receive-frame-error": "0",
+                            "collision-count": "0",
+                            "packets": {
+--
+                        "opendaylight-port-statistics:flow-capable-node-connector-statistics": {
+                            "receive-drops": "0",
+                            "transmit-drops": "0",
+                            "receive-frame-error": "0",
+                            "collision-count": "0",
+                            "packets": {
+--
+                        "stp-status-aware-node-connector:status": "forwarding"
+                    },
+                    {
+                        "id": "openflow:6:2",
+                        "flow-node-inventory:port-number": 2,
+                        "flow-node-inventory:hardware-address": "16:9c:8c:63:28:bc",
+--
+                        "opendaylight-port-statistics:flow-capable-node-connector-statistics": {
+                            "receive-drops": "0",
+                            "transmit-drops": "0",
+                            "receive-frame-error": "0",
+                            "collision-count": "0",
+                            "packets": {
+--
+                        "stp-status-aware-node-connector:status": "forwarding"
+                    },
+                    {
+                        "id": "openflow:6:LOCAL",
+                        "flow-node-inventory:port-number": 4294967294,
+                        "flow-node-inventory:hardware-address": "ba:97:01:da:d5:44",
+--
+                        "opendaylight-port-statistics:flow-capable-node-connector-statistics": {
+                            "receive-drops": "0",
+                            "transmit-drops": "0",
+                            "receive-frame-error": "0",
+                            "collision-count": "0",
+                            "packets": {
+--
+                        "opendaylight-port-statistics:flow-capable-node-connector-statistics": {
+                            "receive-drops": "1",
+                            "transmit-drops": "0",
+                            "receive-frame-error": "0",
+                            "collision-count": "0",
+                            "packets": {
+--
+                        "stp-status-aware-node-connector:status": "discarding"
+                    }
+                ],
+                "flow-node-inventory:ip-address": "127.0.0.1",
+                "flow-node-inventory:serial-number": "None",
+                "flow-node-inventory:snapshot-gathering-status-end": {
+--
+                                                            "output-node-connector": "2"
+                                                        }
+                                                    }
+                                                ]
+                                            }
+                                        }
+--
+                                                            "output-node-connector": "CONTROLLER"
+                                                        }
+                                                    }
+                                                ]
+                                            }
+                                        }
+--
+                                                            "output-node-connector": "1"
+                                                        }
+                                                    }
+                                                ]
+                                            }
+                                        }
+--
+                "node-connector": [
+                    {
+                        "id": "openflow:3:3",
+                        "flow-node-inventory:port-number": 3,
+                        "flow-node-inventory:hardware-address": "1a:94:53:28:d7:b6",
+                        "flow-node-inventory:peer-features": "",
+--
+                        "opendaylight-port-statistics:flow-capable-node-connector-statistics": {
+                            "receive-drops": "0",
+                            "transmit-drops": "0",
+                            "receive-frame-error": "0",
+                            "collision-count": "0",
+                            "packets": {
+--
+                        "stp-status-aware-node-connector:status": "discarding"
+                    },
+                    {
+                        "id": "openflow:3:2",
+                        "flow-node-inventory:port-number": 2,
+                        "flow-node-inventory:hardware-address": "6a:de:35:1d:e3:d5",
+--
+                        "opendaylight-port-statistics:flow-capable-node-connector-statistics": {
+                            "receive-drops": "0",
+                            "transmit-drops": "0",
+                            "receive-frame-error": "0",
+                            "collision-count": "0",
+                            "packets": {
+--
+                        "stp-status-aware-node-connector:status": "forwarding"
+                    },
+                    {
+                        "id": "openflow:3:1",
+                        "flow-node-inventory:port-number": 1,
+                        "flow-node-inventory:hardware-address": "ba:dc:02:c7:e8:82",
+--
+                        "opendaylight-port-statistics:flow-capable-node-connector-statistics": {
+                            "receive-drops": "1",
+                            "transmit-drops": "0",
+                            "receive-frame-error": "0",
+                            "collision-count": "0",
+                            "packets": {
+--
+                        "stp-status-aware-node-connector:status": "forwarding"
+                    },
+                    {
+                        "id": "openflow:3:LOCAL",
+                        "flow-node-inventory:port-number": 4294967294,
+                        "flow-node-inventory:hardware-address": "36:ff:72:f5:43:43",
+--
+                        "opendaylight-port-statistics:flow-capable-node-connector-statistics": {
+                            "receive-drops": "0",
+                            "transmit-drops": "0",
+                            "receive-frame-error": "0",
+                            "collision-count": "0",
+                            "packets": {
+--
+                                                            "output-node-connector": "CONTROLLER"
+                                                        }
+                                                    }
+                                                ]
+                                            }
+                                        }
+--
+                                                            "output-node-connector": "1"
+                                                        }
+                                                    }
+                                                ]
+                                            }
+                                        }
+--
+                                                            "output-node-connector": "3"
+                                                        }
+                                                    }
+                                                ]
+                                            }
+                                        }
+--
+                "node-connector": [
+                    {
+                        "id": "openflow:4:2",
+                        "flow-node-inventory:port-number": 2,
+                        "flow-node-inventory:hardware-address": "06:62:c3:6c:9e:db",
+                        "flow-node-inventory:peer-features": "",
+--
+                        "opendaylight-port-statistics:flow-capable-node-connector-statistics": {
+                            "receive-drops": "0",
+                            "transmit-drops": "0",
+                            "receive-frame-error": "0",
+                            "collision-count": "0",
+                            "packets": {
+--
+                        "stp-status-aware-node-connector:status": "discarding"
+                    },
+                    {
+                        "id": "openflow:4:LOCAL",
+                        "flow-node-inventory:port-number": 4294967294,
+                        "flow-node-inventory:hardware-address": "da:45:91:b0:08:4f",
+--
+                        "opendaylight-port-statistics:flow-capable-node-connector-statistics": {
+                            "receive-drops": "0",
+                            "transmit-drops": "0",
+                            "receive-frame-error": "0",
+                            "collision-count": "0",
+                            "packets": {
+--
+                        "opendaylight-port-statistics:flow-capable-node-connector-statistics": {
+                            "receive-drops": "0",
+                            "transmit-drops": "0",
+                            "receive-frame-error": "0",
+                            "collision-count": "0",
+                            "packets": {
+--
+                        "stp-status-aware-node-connector:status": "forwarding"
+                    },
+                    {
+                        "id": "openflow:4:3",
+                        "flow-node-inventory:port-number": 3,
+                        "flow-node-inventory:hardware-address": "26:2a:d6:e0:1e:4d",
+--
+                        "opendaylight-port-statistics:flow-capable-node-connector-statistics": {
+                            "receive-drops": "0",
+                            "transmit-drops": "0",
+                            "receive-frame-error": "0",
+                            "collision-count": "0",
+                            "packets": {
+--
+                        "stp-status-aware-node-connector:status": "forwarding"
+                    }
+                ],
+                "flow-node-inventory:ip-address": "127.0.0.1",
+                "flow-node-inventory:serial-number": "None",
+                "flow-node-inventory:snapshot-gathering-status-end": {
+--
+                                                            "output-node-connector": "CONTROLLER"
+                                                        }
+                                                    }
+                                                ]
+                                            }
+                                        }
+--
+                                                            "output-node-connector": "4"
+                                                        }
+                                                    }
+                                                ]
+                                            }
+                                        }
+--
+                                                            "output-node-connector": "2"
+                                                        }
+                                                    },
+                                                    {
+                                                        "order": 1,
+                                                        "output-action": {
+--
+                                                            "output-node-connector": "CONTROLLER"
+                                                        }
+                                                    }
+                                                ]
+                                            }
+                                        }
+--
+                "node-connector": [
+                    {
+                        "id": "openflow:1:4",
+                        "flow-node-inventory:port-number": 4,
+                        "flow-node-inventory:hardware-address": "4a:a5:4e:9d:b4:85",
+                        "flow-node-inventory:peer-features": "",
+--
+                        "opendaylight-port-statistics:flow-capable-node-connector-statistics": {
+                            "receive-drops": "0",
+                            "transmit-drops": "0",
+                            "receive-frame-error": "0",
+                            "collision-count": "0",
+                            "packets": {
+--
+                        "opendaylight-port-statistics:flow-capable-node-connector-statistics": {
+                            "receive-drops": "0",
+                            "transmit-drops": "0",
+                            "receive-frame-error": "0",
+                            "collision-count": "0",
+                            "packets": {
+--
+                        "stp-status-aware-node-connector:status": "discarding"
+                    },
+                    {
+                        "id": "openflow:1:LOCAL",
+                        "flow-node-inventory:port-number": 4294967294,
+                        "flow-node-inventory:hardware-address": "1e:06:56:43:a3:4b",
+--
+                        "opendaylight-port-statistics:flow-capable-node-connector-statistics": {
+                            "receive-drops": "0",
+                            "transmit-drops": "0",
+                            "receive-frame-error": "0",
+                            "collision-count": "0",
+                            "packets": {
+--
+                        "opendaylight-port-statistics:flow-capable-node-connector-statistics": {
+                            "receive-drops": "0",
+                            "transmit-drops": "0",
+                            "receive-frame-error": "0",
+                            "collision-count": "0",
+                            "packets": {
+--
+                        "stp-status-aware-node-connector:status": "forwarding"
+                    },
+                    {
+                        "id": "openflow:1:1",
+                        "flow-node-inventory:port-number": 1,
+                        "flow-node-inventory:hardware-address": "8e:3d:ff:a4:f0:4c",
+--
+                        "opendaylight-port-statistics:flow-capable-node-connector-statistics": {
+                            "receive-drops": "0",
+                            "transmit-drops": "0",
+                            "receive-frame-error": "0",
+                            "collision-count": "0",
+                            "packets": {
+--
+                        "stp-status-aware-node-connector:status": "discarding"
+                    }
+                ],
+                "flow-node-inventory:ip-address": "127.0.0.1",
+                "flow-node-inventory:serial-number": "None",
+                "flow-node-inventory:snapshot-gathering-status-end": {
+--
+                                                            "output-node-connector": "3"
+                                                        }
+                                                    }
+                                                ]
+                                            }
+                                        }
+--
+                                                            "output-node-connector": "CONTROLLER"
+                                                        }
+                                                    }
+                                                ]
+                                            }
+                                        }
+--
+                                                            "output-node-connector": "2"
+                                                        }
+                                                    }
+                                                ]
+                                            }
+                                        }
+--
+                "node-connector": [
+                    {
+                        "id": "openflow:2:3",
+                        "flow-node-inventory:port-number": 3,
+                        "flow-node-inventory:hardware-address": "72:c7:f7:f0:c8:98",
+                        "flow-node-inventory:peer-features": "",
+--
+                        "opendaylight-port-statistics:flow-capable-node-connector-statistics": {
+                            "receive-drops": "0",
+                            "transmit-drops": "0",
+                            "receive-frame-error": "0",
+                            "collision-count": "0",
+                            "packets": {
+--
+                        "stp-status-aware-node-connector:status": "forwarding"
+                    },
+                    {
+                        "id": "openflow:2:LOCAL",
+                        "flow-node-inventory:port-number": 4294967294,
+                        "flow-node-inventory:hardware-address": "3a:a9:01:5a:21:4a",
+--
+                        "opendaylight-port-statistics:flow-capable-node-connector-statistics": {
+                            "receive-drops": "0",
+                            "transmit-drops": "0",
+                            "receive-frame-error": "0",
+                            "collision-count": "0",
+                            "packets": {
+--
+                        "opendaylight-port-statistics:flow-capable-node-connector-statistics": {
+                            "receive-drops": "0",
+                            "transmit-drops": "0",
+                            "receive-frame-error": "0",
+                            "collision-count": "0",
+                            "packets": {
+--
+                        "stp-status-aware-node-connector:status": "forwarding"
+                    },
+                    {
+                        "id": "openflow:2:1",
+                        "flow-node-inventory:port-number": 1,
+                        "flow-node-inventory:hardware-address": "22:d0:8a:3c:84:51",
+--
+                        "opendaylight-port-statistics:flow-capable-node-connector-statistics": {
+                            "receive-drops": "0",
+                            "transmit-drops": "0",
+                            "receive-frame-error": "0",
+                            "collision-count": "0",
+                            "packets": {
+--
+                        "stp-status-aware-node-connector:status": "discarding"
+                    }
+                ],
+                "flow-node-inventory:ip-address": "127.0.0.1",
+                "flow-node-inventory:serial-number": "None",
+                "flow-node-inventory:snapshot-gathering-status-end": {

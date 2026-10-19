@@ -60,11 +60,11 @@ class ODLAdapter:
     def get_topology_links(self) -> set[frozenset[str]]:
         response = self._request(
             "GET",
-            "/rests/data/network-topology:network-topology/topology/flow:1",
+            "/rests/data/network-topology:network-topology?content=nonconfig",
         )
         data = response.json()
         links: set[frozenset[str]] = set()
-        for topology in data.get("network-topology", {}).get("topology", []):
+        for topology in data.get("network-topology:network-topology", {}).get("topology", []):
             for link in topology.get("link", []):
                 source = link.get("source", {}).get("source-node")
                 destination = link.get("destination", link.get("dest", {})).get("dest-node")
@@ -73,27 +73,27 @@ class ODLAdapter:
         return links
 
     def get_port_stats(self) -> dict[tuple[str, int], dict[str, int]]:
-        response = self._request("GET", "/rests/data/opendaylight-inventory:nodes")
+        response = self._request("GET", "/rests/data/opendaylight-inventory:nodes?content=nonconfig")
         data = response.json()
         result: dict[tuple[str, int], dict[str, int]] = {}
-        for node in data.get("nodes", {}).get("node", []):
+        for node in data.get("opendaylight-inventory:nodes", {}).get("node", []):
             node_id = node["id"]
             for connector in node.get("node-connector", []):
                 raw = connector.get("opendaylight-port-statistics:flow-capable-node-connector-statistics")
                 if raw is None:
                     continue
-                port = int(connector["id"].rsplit(":", 1)[-1])
+                port = int(connector["flow-node-inventory:port-number"])
                 result[(node_id, port)] = {
-                    "bytes": int(raw.get("bytes", {}).get("transmission", 0)) + int(raw.get("bytes", {}).get("receive", 0)),
-                    "drops": int(raw.get("drop", {}).get("in", 0)) + int(raw.get("drop", {}).get("out", 0)),
-                    "packets": int(raw.get("packets", {}).get("transmission", 0)) + int(raw.get("packets", {}).get("receive", 0)),
+                    "bytes": int(raw.get("bytes", {}).get("transmitted", 0)) + int(raw.get("bytes", {}).get("received", 0)),
+                    "drops": int(raw.get("receive-drops", 0)) + int(raw.get("transmit-drops", 0)),
+                    "packets": int(raw.get("packets", {}).get("transmitted", 0)) + int(raw.get("packets", {}).get("received", 0)),
                 }
         return result
 
     def get_installed_flow_ids(self, node: str) -> set[str]:
         response = self._request(
             "GET",
-            f"/rests/data/opendaylight-inventory:nodes/node/{node}/flow-node-inventory:table/0",
+            f"/rests/data/opendaylight-inventory:nodes/node/{node}/flow-node-inventory:table/0?content=nonconfig",
         )
         data = response.json()
         return self._extract_flow_ids(data)
@@ -111,7 +111,7 @@ class ODLAdapter:
         installed: list[FlowRule] = []
         try:
             for rule in new_rules:
-                path = f"/rests/config/opendaylight-inventory:nodes/node/{rule.node}/flow-node-capability:table/0/flow/{rule.flow_id}"
+                path = f"/rests/data/opendaylight-inventory:nodes/node/{rule.node}/flow-node-inventory:table/0/flow/{rule.flow_id}"
                 self._request("PUT", path, rule.body)
                 installed.append(rule)
             if verify:
@@ -142,5 +142,5 @@ class ODLAdapter:
 
     def delete_rules(self, rules: list[FlowRule]) -> None:
         for rule in rules:
-            path = f"/rests/config/opendaylight-inventory:nodes/node/{rule.node}/flow-node-capability:table/0/flow/{rule.flow_id}"
+            path = f"/rests/data/opendaylight-inventory:nodes/node/{rule.node}/flow-node-inventory:table/0/flow/{rule.flow_id}"
             self._request("DELETE", path)

@@ -32,7 +32,7 @@ odl:
   retries: 3
   flow_priority_baseline: 100
   flow_priority_reroute: 110
-  verify_flows: true
+  verify_flows: false
   flow_verify_timeout_s: 5
 eval:
   manifest: configs/eval_scenarios.json

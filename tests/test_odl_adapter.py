@@ -91,7 +91,7 @@ def test_install_rules_rolls_back_on_failure(monkeypatch):
 def test_get_topology_links_filters_hosts(monkeypatch):
     adapter = make_adapter()
     payload = {
-        "network-topology": {
+        "network-topology:network-topology": {
             "topology": [
                 {
                     "link": [
@@ -109,17 +109,19 @@ def test_get_topology_links_filters_hosts(monkeypatch):
 def test_get_port_stats(monkeypatch):
     adapter = make_adapter()
     payload = {
-        "nodes": {
+        "opendaylight-inventory:nodes": {
             "node": [
                 {
                     "id": "openflow:1",
                     "node-connector": [
                         {
                             "id": "openflow:1:2",
+                            "flow-node-inventory:port-number": 2,
                             "opendaylight-port-statistics:flow-capable-node-connector-statistics": {
-                                "bytes": {"transmission": 100, "receive": 50},
-                                "drop": {"in": 1, "out": 2},
-                                "packets": {"transmission": 10, "receive": 5},
+                                "bytes": {"transmitted": "100", "received": "50"},
+                                "receive-drops": "1",
+                                "transmit-drops": "2",
+                                "packets": {"transmitted": "10", "received": "5"},
                             },
                         }
                     ],
