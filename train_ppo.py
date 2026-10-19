@@ -7,6 +7,7 @@ from stable_baselines3 import PPO
 from stable_baselines3.common.utils import set_random_seed
 
 from shn.candidates import compute_candidates
+from shn.callbacks import TrainingMetricsCallback
 from shn.config import ROOT, load_topology, load_training
 from shn.env.healing_env import HealingEnv
 
@@ -34,6 +35,11 @@ def main():
     run_dir.mkdir(parents=True, exist_ok=True)
     started = time.time()
     cfg = training["ppo"]
+    log_cfg = training.get("logging", {})
+    callback = TrainingMetricsCallback(
+        log_every=int(log_cfg.get("episode_log_every", 1)),
+        rolling_window=int(log_cfg.get("rolling_window", 50)),
+    )
     try:
         model = PPO(
             "MlpPolicy",
@@ -50,7 +56,7 @@ def main():
             seed=args.seed,
             verbose=1,
         )
-        model.learn(total_timesteps=steps)
+        model.learn(total_timesteps=steps, callback=[callback])
         model.save(run_dir / "model")
     finally:
         env.close()
