@@ -48,7 +48,7 @@ class ODLAdapter:
                 continue
             if response.status_code in {200, 201, 202, 204}:
                 return response
-            if method == "DELETE" and response.status_code == 404:
+            if method == "DELETE" and response.status_code in {404, 409}:
                 return response
             if response.status_code in TRANSIENT_STATUS:
                 last_error = ODLRequestError(f"{method} {path} returned {response.status_code}")
