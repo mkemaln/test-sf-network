@@ -93,7 +93,7 @@ class ODLAdapter:
     def get_installed_flow_ids(self, node: str) -> set[str]:
         response = self._request(
             "GET",
-            f"/rests/data/opendaylight-inventory:nodes/node={node}/flow-node-inventory:table/0?content=nonconfig",
+            f"/rests/data/opendaylight-inventory:nodes/node={node}/flow-node-inventory:table=0?content=nonconfig",
         )
         data = response.json()
         return self._extract_flow_ids(data)
@@ -111,7 +111,7 @@ class ODLAdapter:
         installed: list[FlowRule] = []
         try:
             for rule in new_rules:
-                path = f"/rests/data/opendaylight-inventory:nodes/node={rule.node}/flow-node-inventory:table/0/flow/{rule.flow_id}"
+                path = f"/rests/data/opendaylight-inventory:nodes/node={rule.node}/flow-node-inventory:table=0/flow={rule.flow_id}"
                 self._request("PUT", path, rule.body)
                 installed.append(rule)
             if verify:
@@ -142,5 +142,5 @@ class ODLAdapter:
 
     def delete_rules(self, rules: list[FlowRule]) -> None:
         for rule in rules:
-            path = f"/rests/data/opendaylight-inventory:nodes/node={rule.node}/flow-node-inventory:table/0/flow/{rule.flow_id}"
+            path = f"/rests/data/opendaylight-inventory:nodes/node={rule.node}/flow-node-inventory:table=0/flow={rule.flow_id}"
             self._request("DELETE", path)
