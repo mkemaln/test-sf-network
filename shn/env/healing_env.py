@@ -144,7 +144,47 @@ class HealingEnv(gym.Env):
         self.telemetry = Telemetry(self.network, self.topology, self.training, self.adapter, self.link_specs)
         self.telemetry.start_servers()
         self.injector = FailureInjector(self.network)
+        self._install_lldp_rules()
         self._wait_for_topology()
+
+    def _install_lldp_rules(self) -> None:
+        lldp_body = {
+            "flow": {
+                "id": "lldp-to-controller",
+                "table_id": 0,
+                "priority": 100,
+                "idle-timeout": 0,
+                "hard-timeout": 0,
+                "match": {
+                    "ethernet-match": {
+                        "ethernet-type": {"type": 35020}
+                    }
+                },
+                "instructions": {
+                    "instruction": [
+                        {
+                            "order": 0,
+                            "apply-actions": {
+                                "action": [
+                                    {
+                                        "order": 0,
+                                        "output-action": {
+                                            "output-node-connector": "CONTROLLER",
+                                            "max-length": 65535,
+                                        },
+                                    }
+                                ]
+                            },
+                        }
+                    ]
+                },
+            }
+        }
+        lldp_rules = [
+            FlowRule(self.dpid_map[switch], "lldp-to-controller", lldp_body)
+            for switch in self.topology["switches"]
+        ]
+        self.adapter.install_rules(lldp_rules, [], False, 0)
 
     def _wait_for_topology(self, timeout_s: float = 60.0) -> None:
         expected = {

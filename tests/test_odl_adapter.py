@@ -59,7 +59,7 @@ def test_install_rules_adds_then_deletes(monkeypatch):
     sequence = []
 
     def fake_request(method, path, body=None):
-        sequence.append((method, path.split("/flow/")[-1]))
+        sequence.append((method, path.split("/flow=")[-1]))
         return FakeResponse(200)
 
     monkeypatch.setattr(adapter, "_request", fake_request)
@@ -74,7 +74,7 @@ def test_install_rules_rolls_back_on_failure(monkeypatch):
     sequence = []
 
     def fake_request(method, path, body=None):
-        flow_id = path.split("/flow/")[-1]
+        flow_id = path.split("/flow=")[-1]
         if flow_id == "b":
             raise ODLRequestError("boom")
         sequence.append((method, flow_id))
@@ -165,7 +165,7 @@ def test_install_rules_unsafe_on_rollback_failure(monkeypatch):
     adapter = make_adapter()
 
     def fake_request(method, path, body=None):
-        flow_id = path.split("/flow/")[-1]
+        flow_id = path.split("/flow=")[-1]
         if method == "PUT" and flow_id == "a":
             return FakeResponse(200)
         if method == "PUT" and flow_id == "b":
